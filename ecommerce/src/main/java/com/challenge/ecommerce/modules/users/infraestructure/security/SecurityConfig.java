@@ -35,11 +35,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //TODO: Revisar endpoint para usuario unico
                         .requestMatchers("/api/auth/login",
-                                "/api/auth/register",
-                                "/api/users",
-                                "/api/users/**"/*,
-                                "/api/roles",
-                                "api/roles/**"*/).permitAll()
+                                "/api/auth/register").permitAll()
+                        .requestMatchers("/api/users",
+                                "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/roles",
                                 "api/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -1,5 +1,7 @@
 package com.challenge.ecommerce.modules.users.domain.service;
 
+import com.challenge.ecommerce.modules.users.adapters.input.dto.user.RegisterRequestDTO;
+import com.challenge.ecommerce.modules.users.adapters.input.dto.user.RegisterResponseDTO;
 import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserRequestDTO;
 import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserResponseDTO;
 import com.challenge.ecommerce.modules.users.domain.model.Role;
@@ -43,6 +45,24 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
         return mapToUserResponse(savedUser);
+    }
+
+    public RegisterResponseDTO registerUser(RegisterRequestDTO registerRequestDTO) {
+        User user = new User();
+        //TODO: Hacer validacion si el usuario ya existe en base de datos para evitar duplicados
+        user.setUsername(registerRequestDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        user.setNames(registerRequestDTO.getNames());
+        user.setSurnames(registerRequestDTO.getSurnames());
+        user.setAdress(registerRequestDTO.getAdress());
+        user.setEmail(registerRequestDTO.getEmail());
+
+        Set<Role> roleUser = new HashSet<>();
+        roleUser.add(roleRepository.findByName("ROLE_USER"));
+        user.setRoles(roleUser);
+
+        User savedUser = userRepository.save(user);
+        return matToRegisterUserResponse(savedUser);
     }
 
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
@@ -90,5 +110,17 @@ public class UserService {
                 .map(Role::getName)
                 .collect(Collectors.toSet()));
         return userResponseDTO;
+    }
+
+    private RegisterResponseDTO matToRegisterUserResponse(User user) {
+        RegisterResponseDTO registerResponseDTO = new RegisterResponseDTO();
+        registerResponseDTO.setUsername(user.getUsername());
+        registerResponseDTO.setNames(user.getNames());
+        registerResponseDTO.setSurnames(user.getSurnames());
+        registerResponseDTO.setAdress(user.getAdress());
+        registerResponseDTO.setEmail(user.getEmail());
+        registerResponseDTO.setNumberOfOrders(user.getNumberOfOrders());
+
+        return registerResponseDTO;
     }
 }

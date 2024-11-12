@@ -21,7 +21,12 @@ public class User {
 
     private String username;
     private String password;
+    private String names;
+    private String surnames;
+    private String adress;
     private String email;
+    /*private List<Order> orders;*/
+    private Long numberOfOrders;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

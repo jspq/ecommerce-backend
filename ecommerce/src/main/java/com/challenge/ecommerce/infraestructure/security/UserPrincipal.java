@@ -1,4 +1,4 @@
-package com.challenge.ecommerce.modules.users.infraestructure.security;
+package com.challenge.ecommerce.infraestructure.security;
 
 import com.challenge.ecommerce.modules.users.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;

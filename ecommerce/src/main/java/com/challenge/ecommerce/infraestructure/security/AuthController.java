@@ -1,4 +1,4 @@
-package com.challenge.ecommerce.modules.users.infraestructure.security;
+package com.challenge.ecommerce.infraestructure.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

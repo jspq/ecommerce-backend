@@ -24,12 +24,14 @@ public class RoleController {
     }
 
     @GetMapping
-    public List<Role> getAllRoles() {
-        return roleService.getAllRoles();
+    public ResponseEntity<List<RoleResponseDTO>> getAllRoles() {
+        List<RoleResponseDTO> roles = roleService.getAllRoles();
+        return ResponseEntity.ok(roles);
     }
 
     @GetMapping("/{id}")
-    public Role findRoleById(@PathVariable Long id) {
-        return roleService.findRoleById(id);
+    public ResponseEntity<RoleResponseDTO> findRoleById(@PathVariable Long id) {
+        RoleResponseDTO roleResponseDTO = roleService.findRoleById(id);
+        return ResponseEntity.ok(roleResponseDTO);
     }
 }

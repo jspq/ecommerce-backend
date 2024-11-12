@@ -23,12 +23,16 @@ public class RoleService {
         return mapToRoleResponse(savedRole);
     }
 
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public List<RoleResponseDTO> getAllRoles() {
+        return roleRepository.findAll().stream()
+                .map(this::mapToRoleResponse)
+                .toList();
     }
 
-    public Role findRoleById(Long id) {
-        return roleRepository.findById(id).orElse(null);
+    public RoleResponseDTO findRoleById(Long id) {
+        Role role = roleRepository.findById(id).orElse(null);
+        RoleResponseDTO roleResponseDTO = mapToRoleResponse(role);
+        return roleResponseDTO;
     }
 
     public Role findRoleByName(String name) {

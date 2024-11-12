@@ -7,6 +7,7 @@ import com.challenge.ecommerce.modules.users.domain.model.User;
 import com.challenge.ecommerce.modules.users.domain.repository.RoleRepository;
 import com.challenge.ecommerce.modules.users.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,10 +22,17 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserService(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+        //TODO: Hacer validacion si el usuario ya existe en base de datos para evitar duplicados
         User user = new User();
         user.setUsername(userRequestDTO.getUsername());
-        user.setPassword(userRequestDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         user.setEmail(userRequestDTO.getEmail());
         Set<Role> roles = userRequestDTO.getRoles().stream()
                 .map(roleRepository::findById)
@@ -41,7 +49,7 @@ public class UserService {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         userToUpdate.setUsername(userRequestDTO.getUsername());
-        userToUpdate.setPassword(userRequestDTO.getPassword());
+        userToUpdate.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         userToUpdate.setEmail(userRequestDTO.getEmail());
 
         Set<Role> roles = userRequestDTO.getRoles().stream()

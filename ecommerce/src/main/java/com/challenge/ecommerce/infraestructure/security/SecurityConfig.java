@@ -37,7 +37,8 @@ public class SecurityConfig {
                                 "/api/catalog",
                                 "/api/catalog/**",
                                 "/api/products",
-                                "/api/products/**").permitAll()
+                                "/api/products/**",
+                                "/api/orders/**").permitAll()
                         .requestMatchers("/api/users",
                                 "/api/users/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/roles",

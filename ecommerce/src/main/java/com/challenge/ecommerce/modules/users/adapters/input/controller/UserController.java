@@ -2,6 +2,7 @@ package com.challenge.ecommerce.modules.users.adapters.input.controller;
 
 import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserRequestDTO;
 import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserResponseDTO;
+import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserUpdateRequestDTO;
 import com.challenge.ecommerce.modules.users.domain.model.Role;
 import com.challenge.ecommerce.modules.users.domain.model.User;
 import com.challenge.ecommerce.modules.users.domain.service.UserService;
@@ -30,8 +31,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id,
-                                                      @RequestBody UserRequestDTO userRequestDTO) {
-        UserResponseDTO userResponseDTO = userService.updateUser(id, userRequestDTO);
+                                                      @RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
+        UserResponseDTO userResponseDTO = userService.updateUser(id, userUpdateRequestDTO);
         return ResponseEntity.ok(userResponseDTO);
     }
 

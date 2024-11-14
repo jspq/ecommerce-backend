@@ -1,13 +1,14 @@
-package com.challenge.ecommerce.modules.users.infraestructure.security;
+package com.challenge.ecommerce.infraestructure.security;
 
 import com.challenge.ecommerce.modules.users.domain.model.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
+@Getter
 public class UserPrincipal implements UserDetails {
 
     private Long id;

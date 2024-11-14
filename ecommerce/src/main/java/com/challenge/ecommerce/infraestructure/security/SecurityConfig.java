@@ -40,9 +40,11 @@ public class SecurityConfig {
                                 "/api/catalog/**",
                                 "/api/products",
                                 "/api/products/**",
-                                "/api/orders/**").permitAll()
-                        .requestMatchers("/api/users",
-                                "/api/users/**").hasAnyRole("USER", "ADMIN")
+                                "/api/orders",
+                                "/api/orders/**",
+                                "/api/users",
+                                "/api/users/**").permitAll()
+                        //.requestMatchers().hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/roles",
                                 "api/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -60,7 +62,7 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

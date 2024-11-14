@@ -1,7 +1,9 @@
 package com.challenge.ecommerce.modules.products.domain.service;
 
+import com.challenge.ecommerce.modules.products.adapters.input.dto.order.OrderProductSummaryDTO;
 import com.challenge.ecommerce.modules.products.domain.model.Order;
 import com.challenge.ecommerce.modules.products.domain.model.OrderProduct;
+import com.challenge.ecommerce.modules.products.domain.model.Product;
 import com.challenge.ecommerce.modules.products.domain.repository.OrderProductRepository;
 import com.challenge.ecommerce.modules.products.domain.repository.OrderRepository;
 import com.challenge.ecommerce.modules.products.domain.repository.ProductRepository;
@@ -9,7 +11,9 @@ import com.challenge.ecommerce.modules.users.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,6 +64,46 @@ public class OrderService {
         order.setState("CONFIRMED");
         order.setConfirmDate(new Date());
         orderRepository.save(order);
+    }
+
+    public List<OrderProductSummaryDTO> getOrderProductSummaryByUserId(Long userId) {
+        List<Order> orders = orderRepository.findAllByUserId(userId);
+
+        List<OrderProductSummaryDTO> productSummaryList = new ArrayList<>();
+
+        for (Order order : orders) {
+            for (OrderProduct orderProduct : order.getProducts()) {
+                Product product = orderProduct.getProduct();
+                OrderProductSummaryDTO summary = new OrderProductSummaryDTO(
+                        product.getName(),
+                        orderProduct.getAmount(),
+                        product.getPrice()
+                );
+                productSummaryList.add(summary);
+            }
+        }
+
+        return productSummaryList;
+    }
+
+    public List<OrderProductSummaryDTO> getOrderProductSummaryByUser(Long userId) {
+        List<Order> orders = orderRepository.findAllByUserIdAndState(userId, "PENDING");
+
+        List<OrderProductSummaryDTO> productSummaryList = new ArrayList<>();
+
+        for (Order order : orders) {
+            for (OrderProduct orderProduct : order.getProducts()) {
+                Product product = orderProduct.getProduct();
+                OrderProductSummaryDTO summary = new OrderProductSummaryDTO(
+                        product.getName(),
+                        orderProduct.getAmount(),
+                        product.getPrice()
+                );
+                productSummaryList.add(summary);
+            }
+        }
+
+        return productSummaryList;
     }
 
 }

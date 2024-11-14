@@ -1,9 +1,6 @@
 package com.challenge.ecommerce.modules.users.domain.service;
 
-import com.challenge.ecommerce.modules.users.adapters.input.dto.user.RegisterRequestDTO;
-import com.challenge.ecommerce.modules.users.adapters.input.dto.user.RegisterResponseDTO;
-import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserRequestDTO;
-import com.challenge.ecommerce.modules.users.adapters.input.dto.user.UserResponseDTO;
+import com.challenge.ecommerce.modules.users.adapters.input.dto.user.*;
 import com.challenge.ecommerce.modules.users.domain.model.Role;
 import com.challenge.ecommerce.modules.users.domain.model.User;
 import com.challenge.ecommerce.modules.users.domain.repository.RoleRepository;
@@ -65,19 +62,15 @@ public class UserService {
         return matToRegisterUserResponse(savedUser);
     }
 
-    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
+    public UserResponseDTO updateUser(Long id, UserUpdateRequestDTO userUpdateRequestDTO) {
         User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        userToUpdate.setUsername(userRequestDTO.getUsername());
-        userToUpdate.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-        userToUpdate.setEmail(userRequestDTO.getEmail());
-
-        Set<Role> roles = userRequestDTO.getRoles().stream()
-                .map(roleRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
-        userToUpdate.setRoles(roles);
+        userToUpdate.setUsername(userUpdateRequestDTO.getUsername());
+        userToUpdate.setPassword(passwordEncoder.encode(userUpdateRequestDTO.getPassword()));
+        userToUpdate.setNames(userUpdateRequestDTO.getNames());
+        userToUpdate.setSurnames(userUpdateRequestDTO.getSurnames());
+        userToUpdate.setAdress(userUpdateRequestDTO.getAdress());
+        userToUpdate.setEmail(userUpdateRequestDTO.getEmail());
 
         User updatedUser = userRepository.save(userToUpdate);
         return mapToUserResponse(updatedUser);
@@ -105,10 +98,10 @@ public class UserService {
         UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUsername());
+        userResponseDTO.setNames(user.getNames());
+        userResponseDTO.setSurnames(user.getSurnames());
+        userResponseDTO.setAdress(user.getAdress());
         userResponseDTO.setEmail(user.getEmail());
-        userResponseDTO.setRoles(user.getRoles().stream()
-                .map(Role::getName)
-                .collect(Collectors.toSet()));
         return userResponseDTO;
     }
 

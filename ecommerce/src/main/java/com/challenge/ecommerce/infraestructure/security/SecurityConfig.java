@@ -1,4 +1,4 @@
-package com.challenge.ecommerce.modules.users.infraestructure.security;
+package com.challenge.ecommerce.infraestructure.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,11 +6,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -35,9 +35,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //TODO: Revisar endpoint para usuario unico
                         .requestMatchers("/api/auth/login",
-                                "/api/auth/register").permitAll()
-                        .requestMatchers("/api/users",
-                                "/api/users/**").hasAnyRole("USER", "ADMIN")
+                                "/api/auth/register",
+                                "/api/catalog",
+                                "/api/catalog/**",
+                                "/api/products",
+                                "/api/products/**",
+                                "/api/orders",
+                                "/api/orders/**",
+                                "/api/users",
+                                "/api/users/**").permitAll()
+                        //.requestMatchers().hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/roles",
                                 "api/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -46,6 +53,20 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:4200")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 
     @Bean

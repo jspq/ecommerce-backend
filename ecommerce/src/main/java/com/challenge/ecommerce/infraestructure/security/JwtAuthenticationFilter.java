@@ -1,4 +1,4 @@
-package com.challenge.ecommerce.modules.users.infraestructure.security;
+package com.challenge.ecommerce.infraestructure.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
